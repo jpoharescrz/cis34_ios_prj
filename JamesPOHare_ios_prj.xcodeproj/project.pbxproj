@@ -10,9 +10,21 @@
 		8D3C966824665AF800A03F7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C966724665AF800A03F7D /* AppDelegate.swift */; };
 		8D3C966A24665AF800A03F7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C966924665AF800A03F7D /* SceneDelegate.swift */; };
 		8D3C966C24665AF800A03F7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C966B24665AF800A03F7D /* ViewController.swift */; };
-		8D3C966F24665AF800A03F7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D3C966D24665AF800A03F7D /* Main.storyboard */; };
 		8D3C967124665AF800A03F7D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D3C967024665AF800A03F7D /* Assets.xcassets */; };
 		8D3C967424665AF800A03F7D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D3C967224665AF800A03F7D /* LaunchScreen.storyboard */; };
+		8D3C968024665B8F00A03F7D /* GraphicsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C967B24665B8F00A03F7D /* GraphicsViewController.swift */; };
+		8D3C968124665B8F00A03F7D /* graphics in Resources */ = {isa = PBXBuildFile; fileRef = 8D3C967C24665B8F00A03F7D /* graphics */; };
+		8D3C968224665B8F00A03F7D /* GeneralSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C967D24665B8F00A03F7D /* GeneralSettingsTableViewController.swift */; };
+		8D3C968324665B8F00A03F7D /* HdgSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C967E24665B8F00A03F7D /* HdgSettingsTableViewController.swift */; };
+		8D3C968424665B8F00A03F7D /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C967F24665B8F00A03F7D /* HomeViewController.swift */; };
+		8D3C968C24665BE900A03F7D /* SimSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C968524665BE900A03F7D /* SimSettingsTableViewController.swift */; };
+		8D3C968D24665BE900A03F7D /* SpdSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C968624665BE900A03F7D /* SpdSettingsTableViewController.swift */; };
+		8D3C968E24665BE900A03F7D /* TalkingScalars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C968724665BE900A03F7D /* TalkingScalars.swift */; };
+		8D3C968F24665BE900A03F7D /* Simulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C968824665BE900A03F7D /* Simulator.swift */; };
+		8D3C969024665BE900A03F7D /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C968924665BE900A03F7D /* Utilities.swift */; };
+		8D3C969124665BE900A03F7D /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = 8D3C968A24665BE900A03F7D /* Sounds */; };
+		8D3C969224665BE900A03F7D /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3C968B24665BE900A03F7D /* UserSettings.swift */; };
+		8D3C969424665C1100A03F7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D3C969324665C1100A03F7D /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,10 +32,22 @@
 		8D3C966724665AF800A03F7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D3C966924665AF800A03F7D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8D3C966B24665AF800A03F7D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		8D3C966E24665AF800A03F7D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8D3C967024665AF800A03F7D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8D3C967324665AF800A03F7D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3C967524665AF800A03F7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D3C967B24665B8F00A03F7D /* GraphicsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicsViewController.swift; sourceTree = "<group>"; };
+		8D3C967C24665B8F00A03F7D /* graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; path = graphics; sourceTree = "<group>"; };
+		8D3C967D24665B8F00A03F7D /* GeneralSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralSettingsTableViewController.swift; sourceTree = "<group>"; };
+		8D3C967E24665B8F00A03F7D /* HdgSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HdgSettingsTableViewController.swift; sourceTree = "<group>"; };
+		8D3C967F24665B8F00A03F7D /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		8D3C968524665BE900A03F7D /* SimSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimSettingsTableViewController.swift; sourceTree = "<group>"; };
+		8D3C968624665BE900A03F7D /* SpdSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpdSettingsTableViewController.swift; sourceTree = "<group>"; };
+		8D3C968724665BE900A03F7D /* TalkingScalars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkingScalars.swift; sourceTree = "<group>"; };
+		8D3C968824665BE900A03F7D /* Simulator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Simulator.swift; sourceTree = "<group>"; };
+		8D3C968924665BE900A03F7D /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		8D3C968A24665BE900A03F7D /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sounds; sourceTree = "<group>"; };
+		8D3C968B24665BE900A03F7D /* UserSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		8D3C969324665C1100A03F7D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,10 +80,22 @@
 		8D3C966624665AF800A03F7D /* JamesPOHare_ios_prj */ = {
 			isa = PBXGroup;
 			children = (
+				8D3C969324665C1100A03F7D /* Main.storyboard */,
+				8D3C968524665BE900A03F7D /* SimSettingsTableViewController.swift */,
+				8D3C968824665BE900A03F7D /* Simulator.swift */,
+				8D3C968A24665BE900A03F7D /* Sounds */,
+				8D3C968624665BE900A03F7D /* SpdSettingsTableViewController.swift */,
+				8D3C968724665BE900A03F7D /* TalkingScalars.swift */,
+				8D3C968B24665BE900A03F7D /* UserSettings.swift */,
+				8D3C968924665BE900A03F7D /* Utilities.swift */,
+				8D3C967D24665B8F00A03F7D /* GeneralSettingsTableViewController.swift */,
+				8D3C967C24665B8F00A03F7D /* graphics */,
+				8D3C967B24665B8F00A03F7D /* GraphicsViewController.swift */,
+				8D3C967E24665B8F00A03F7D /* HdgSettingsTableViewController.swift */,
+				8D3C967F24665B8F00A03F7D /* HomeViewController.swift */,
 				8D3C966724665AF800A03F7D /* AppDelegate.swift */,
 				8D3C966924665AF800A03F7D /* SceneDelegate.swift */,
 				8D3C966B24665AF800A03F7D /* ViewController.swift */,
-				8D3C966D24665AF800A03F7D /* Main.storyboard */,
 				8D3C967024665AF800A03F7D /* Assets.xcassets */,
 				8D3C967224665AF800A03F7D /* LaunchScreen.storyboard */,
 				8D3C967524665AF800A03F7D /* Info.plist */,
@@ -125,9 +161,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D3C969124665BE900A03F7D /* Sounds in Resources */,
+				8D3C969424665C1100A03F7D /* Main.storyboard in Resources */,
 				8D3C967424665AF800A03F7D /* LaunchScreen.storyboard in Resources */,
+				8D3C968124665B8F00A03F7D /* graphics in Resources */,
 				8D3C967124665AF800A03F7D /* Assets.xcassets in Resources */,
-				8D3C966F24665AF800A03F7D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +176,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D3C968F24665BE900A03F7D /* Simulator.swift in Sources */,
+				8D3C968C24665BE900A03F7D /* SimSettingsTableViewController.swift in Sources */,
 				8D3C966C24665AF800A03F7D /* ViewController.swift in Sources */,
 				8D3C966824665AF800A03F7D /* AppDelegate.swift in Sources */,
+				8D3C969224665BE900A03F7D /* UserSettings.swift in Sources */,
+				8D3C968324665B8F00A03F7D /* HdgSettingsTableViewController.swift in Sources */,
+				8D3C968E24665BE900A03F7D /* TalkingScalars.swift in Sources */,
+				8D3C969024665BE900A03F7D /* Utilities.swift in Sources */,
+				8D3C968224665B8F00A03F7D /* GeneralSettingsTableViewController.swift in Sources */,
+				8D3C968D24665BE900A03F7D /* SpdSettingsTableViewController.swift in Sources */,
 				8D3C966A24665AF800A03F7D /* SceneDelegate.swift in Sources */,
+				8D3C968424665B8F00A03F7D /* HomeViewController.swift in Sources */,
+				8D3C968024665B8F00A03F7D /* GraphicsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		8D3C966D24665AF800A03F7D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8D3C966E24665AF800A03F7D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		8D3C967224665AF800A03F7D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

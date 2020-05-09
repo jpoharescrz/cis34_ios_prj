@@ -2,6 +2,15 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:GraphicsViewController.swift">
+   </FileRef>
+   <FileRef
+      location = "group:HdgSettingsTableViewController.swift">
+   </FileRef>
+   <FileRef
+      location = "group:HomeViewController.swift">
+   </FileRef>
+   <FileRef
       location = "self:JamesPOHare_ios_prj.xcodeproj">
    </FileRef>
 </Workspace>
