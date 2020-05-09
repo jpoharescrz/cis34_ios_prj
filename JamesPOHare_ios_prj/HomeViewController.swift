@@ -28,7 +28,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     var speechUtterance = AVSpeechUtterance()
     var audioPlayer = AVAudioPlayer()
     var timer = Timer()
-    let TimerFreq: Int = 5  // timer runs every 250 ms
+    var TimerFreq: Int = 5  // timer runs every 250 ms
     
     var trendTimer = Timer()
     let trendTimerFreq: Int = 10 // timer runs every 100 ms
@@ -109,6 +109,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
         locManager.headingFilter = kCLHeadingFilterNone
         locManager.delegate = self // you forgot to set the delegate
         
+        TimerFreq = settings.timerFreq
         hdgManager.timerFreq = TimerFreq
         spdManager.timerFreq = TimerFreq
         
