@@ -85,6 +85,8 @@ let SimSpeed: Float = 10.0
 let SimSpdAmpl: Float = 2.0
 let SimSpdPeriod: Float = 15
 
+let TimerFreq: Int = 5
+
 var settings = UserSettings()
 
 class UserSettings {
@@ -123,6 +125,7 @@ class UserSettings {
     
     var running: Bool = false
     var timer = Timer()
+    var timerFreq = TimerFreq
     var trendTimer = Timer()
     var darkMode: Bool
     var mphKnots: Bool
