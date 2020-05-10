@@ -41,8 +41,8 @@ class GeneralSettingsTableViewController: UITableViewController, DarkModeChgDele
         spchPitchLbl.text = String(format: "Pitch: %.2f",spchPitchRef.value)
         spchVolumeRef.value = settings.speechVolume
         spchVolumeLbl.text = String(format: "Volume: %.2f",spchVolumeRef.value)
-        spchPostDelayRef.value = settings.speechPostDelay
-        spchPostDelayLbl.text = String(format: "Post Delay: %.2f",spchPostDelayRef.value)
+        //spchPostDelayRef.value = settings.speechPostDelay
+        //spchPostDelayLbl.text = String(format: "Post Delay: %.2f",spchPostDelayRef.value)
         hdgDampingRef.value = Float(settings.hdgDamping)
         hdgDampingLbl.text = String(format: "Hdg Damping: %.0f",hdgDampingRef.value)
         simRef.isOn = settings.simEnable
@@ -63,9 +63,9 @@ class GeneralSettingsTableViewController: UITableViewController, DarkModeChgDele
         spchVolumeRef.frame.origin.x = width -
             spchVolumeRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
         spchVolumeRef.frame.origin.y = CGFloat(sliderYPosition)
-        spchPostDelayRef.frame.origin.x = width -
-            spchPostDelayRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
-        spchPostDelayRef.frame.origin.y = CGFloat(sliderYPosition)
+        //spchPostDelayRef.frame.origin.x = width -
+         //   spchPostDelayRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
+        //spchPostDelayRef.frame.origin.y = CGFloat(sliderYPosition)
         hdgDampingRef.frame.origin.x = width -
             hdgDampingRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
         hdgDampingRef.frame.origin.y = CGFloat(sliderYPosition)
