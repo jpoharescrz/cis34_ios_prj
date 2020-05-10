@@ -80,37 +80,40 @@ class SimSettingsTableViewController: UITableViewController, DarkModeChgDelegate
     @IBAction func heading(_ sender: Any) {
         
         print("Sim heading: \(headingRef.text ??  "error")")
-        settings.simHeading = Float(headingRef.text!) ?? 359.0
+        settings.simSettingUpdate( setting: .heading, value: Float(headingRef.text!) ?? 359.0)
     }
     
     @IBOutlet weak var hdgAmplRef: UITextField!
     @IBAction func hdgAmpl(_ sender: Any) {
+        
         print("Sim hdgAmpl: \(hdgAmplRef.text ??  "error")")
-        settings.simHdgAmpl = Float(hdgAmplRef.text!) ?? 25
+        settings.simSettingUpdate( setting: .hdgAmpl, value: Float(hdgAmplRef.text!) ?? 25.0)
     }
     
     @IBOutlet weak var hdgPeriodRef: UITextField!
     @IBAction func hdgPeriod(_ sender: Any) {
+        
         print("Sim hdgPeriod: \(hdgPeriodRef.text ??  "error")")
-        settings.simHdgPeriod = Float(hdgPeriodRef.text!) ?? 20
+        settings.simSettingUpdate( setting: .hdgPeriod, value: Float(hdgPeriodRef.text!) ?? 20.0)
     }
     
     @IBOutlet weak var speedRef: UITextField!
     @IBAction func speed(_ sender: Any) {
         print("Sim speed: \(speedRef.text ??  "error")")
-        settings.simSpeed = Float(speedRef.text!) ?? 10.0
+        settings.simSettingUpdate( setting: .speed, value: Float(speedRef.text!) ?? 10.0)
     }
     
     @IBOutlet weak var spdAmplRef: UITextField!
     @IBAction func spdAmpl(_ sender: Any) {
         print("Sim spdAmpl: \(spdAmplRef.text ??  "error")")
-        settings.simSpdAmpl = Float(spdAmplRef.text!) ?? 2.0
+        settings.simSettingUpdate( setting: .spdAmpl, value: Float(spdAmplRef.text!) ?? 2.0)
     }
     
     @IBOutlet weak var spdPeriodRef: UITextField!
     @IBAction func spdPeriod(_ sender: Any) {
         print("Sim spdPeriod: \(spdPeriodRef.text ??  "error")")
         settings.simSpdPeriod = Float(spdPeriodRef.text!) ?? 15
+        settings.simSettingUpdate( setting: .spdPeriod, value: Float(spdPeriodRef.text!) ?? 15.0)
     }
     // MARK: - Table view data source
 
@@ -121,7 +124,7 @@ class SimSettingsTableViewController: UITableViewController, DarkModeChgDelegate
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 6
+        return 7
     }
 
     /*
