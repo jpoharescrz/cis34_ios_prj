@@ -22,7 +22,7 @@ class SpeakableScalar {
     var interval: Float
     var lastSample: Float
     var trend: Float
-    let trendEnhancedRptFactor: Float = 0.18
+    let trendEnhancedRptFactor: Float = 0.12
     let trendThreshToIndicate: Float = 1.2
     var prevTrendSignal: String
     var indicateTrend: Bool
@@ -86,7 +86,7 @@ class SpeakableScalar {
     func markCrossed(_ dataSample: Float) -> (Bool, Float, Int, Bool) {
           
         var crossed: Bool = false
-        var hatchMark: Float = 0.0
+        var intervalCrossed: Float = 0.0
         var dirCrossed: Int = 1 // 1 == positive direction, -1 neg dir
         var dirChanged: Bool = false
         var roundUp: Bool = false
@@ -121,16 +121,16 @@ class SpeakableScalar {
             }
         }
         if crossed {
-            hatchMark = round(dataSample, roundUp: roundUp, interval: interval, modulo: modulo)
+            intervalCrossed = round(dataSample, roundUp: roundUp, interval: interval, modulo: modulo)
         }
-        return (crossed, hatchMark, dirCrossed, dirChanged)
+        return (crossed, intervalCrossed, dirCrossed, dirChanged)
     }
     
-    func procNewSample(_ sample: Float ) -> (report:Bool, procSample: Float, crossed: Bool, dirCrossed: Int) {
+    func procNewSample(_ sample: Float ) -> (report:Bool, sampleToSpeak: Float, crossed: Bool, dirCrossed: Int) {
         
         var report: Bool = false
         var crossed: Bool = false
-        var procSample: Float = 0.0
+        var sampleToSpeak: Float = 0.0
         var dirCrossed: Int = 1 // 1 == positive direction, -1 neg dir
         var dirChanged: Bool = false
         
@@ -151,7 +151,7 @@ class SpeakableScalar {
             report = true
             maxTimer = maxPeriod * timerFreq
             minTimer = Float( minPeriod * timerFreq )
-            procSample = sample
+            sampleToSpeak = sample
             //print("MinPeriod: \(minPeriod)")
         }
         else {
@@ -160,17 +160,18 @@ class SpeakableScalar {
         
         if (minTimer <= 0) && !isSpeakingOrPlayingSound {  // if minimum period passed,
                             // check for interval crossing
-            (crossed, procSample, dirCrossed, dirChanged) =
+            (crossed, sampleToSpeak, dirCrossed, dirChanged) =
                 markCrossed( sample )
             if crossed {
      
                 prevDirCrossed = dirCrossed
-                prevMarkedValue = procSample
+                prevMarkedValue = sampleToSpeak
                 
                 if !dirChanged {
                     minTimer = Float(minPeriod * timerFreq)
                 } else {
-                    minTimer = 0 // stay verbose if trend changed
+                    //minTimer = 0 // stay verbose if trend changed
+                    minTimer = Float(minPeriod * timerFreq)/2 // stay verbose if trend changed
                 }
                 // First full report after interval crossing
                 // happens in InitialMaxPeriod instead of MaxPeriod
@@ -188,7 +189,7 @@ class SpeakableScalar {
         if audioEnabled == false {
             report = false
         }
-        return (report, procSample, crossed, dirCrossed)
+        return (report, sampleToSpeak, crossed, dirCrossed)
     }
 }
 
