@@ -37,15 +37,16 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     let trendTimerMaxInit: Int = 50         // max period 5.0 seconds
     let trendPeriodReductionMax: Int = 34
     let trendTimerFactor: Int = 6
-    let maxTrendTimerDownCountEnhancement: Float = 1.1
+    let maxTrendTimerDownCountEnhancement: Float = 0.75
+    let trendSigEnhancedRptFactor:Float = 0.35
     
     var locManager = CLLocationManager.init()
     
-    let trendSigEnhancedRptFactor:Float = 0.5
-    let hdgSpeechRateAdjustFactor:Float = 0.11
+    
+    let hdgSpeechRateAdjustFactor:Float = 0.08
     
     let spdSpeechRateAdjustFactor:Float = 0.2
-    let spdSpeechPitchAdjust: Float = 0.17
+    let spdSpeechPitchAdjust: Float = 0.19
     
     let maxSpeechRate = 0.67
     let maxSpeechPitch = 0.85
@@ -216,7 +217,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
                  
              if report {
 
-                rateAdjust = abs(hdgManager.trend) * hdgSpeechRateAdjustFactor
+                rateAdjust = abs(hdgManager.perSecTrend) * hdgSpeechRateAdjustFactor
                 speakText( textToSpeak, pitchAdjust: 0, rateAdjust: rateAdjust)
                  lastSpokenScaler = hdgManager.name
                  print("heading \(textToSpeak) spoken")
@@ -250,7 +251,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
            
         if report {
             
-            rateAdjust = abs(spdManager.trend) * spdSpeechRateAdjustFactor
+            rateAdjust = abs(spdManager.perSecTrend) * spdSpeechRateAdjustFactor
             speakText( textToSpeak, pitchAdjust: spdSpeechPitchAdjust, rateAdjust: rateAdjust ) // higher pitch
                                                         //voice for speed
             lastSpokenScaler = spdManager.name
@@ -285,12 +286,12 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
                         playSound("Sounds/delta_steady-2")
                 }
                 trendTimerCnt = Float(trendTimerMaxInit)
-                let trendPeriodReduction = abs(hdgManager.trend * Float(TimerFreq)) * Float(trendTimerFactor)
+                let trendPeriodReduction = abs(hdgManager.perSecTrend * Float(TimerFreq)) * Float(trendTimerFactor)
                 trendTimerCnt -= Float(min( trendPeriodReduction ,Float(trendPeriodReductionMax)))
                 
             } else if curHeadingInitCnt == 0 { // No trend signals for first few samples
                 //trendTimerCnt -= 1
-                let trendTimerDownCountEnhancement = min((abs(hdgManager.trend) * trendSigEnhancedRptFactor), maxTrendTimerDownCountEnhancement)
+                let trendTimerDownCountEnhancement = min((abs(hdgManager.perSecTrend) * trendSigEnhancedRptFactor), maxTrendTimerDownCountEnhancement)
                 //print("trendTimerDownCountEnhancement:  \(trendTimerDownCountEnhancement)")
                 trendTimerCnt -= Float(1 + trendTimerDownCountEnhancement)
             }
