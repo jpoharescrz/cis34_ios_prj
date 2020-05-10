@@ -30,6 +30,16 @@ enum SpeechSetting {
     case postDelay
 }
 
+enum SimSetting {
+    
+    case heading
+    case hdgAmpl
+    case hdgPeriod
+    case speed
+    case spdAmpl
+    case spdPeriod
+}
+
 protocol UserHdgSettingsUpdateDelegate {
     
     func hdgSettingsChg( setting: TalkingScalarSetting, value: Bool )
@@ -79,13 +89,13 @@ let SpeechPostDelay: Float = 0.5
 var SpeechIsSpeaking: Bool = false
 
 let SimHeading: Float = 360
-let SimHdgAmpl: Float = 20
-let SimHdgPeriod: Float = 20
+let SimHdgAmpl: Float = 40
+let SimHdgPeriod: Float = 26
 let SimSpeed: Float = 10.0
 let SimSpdAmpl: Float = 2.0
-let SimSpdPeriod: Float = 15
+let SimSpdPeriod: Float = 25
 
-let TimerFreq: Int = 5
+let TimerFreq: Int = 6
 
 var settings = UserSettings()
 
@@ -221,7 +231,7 @@ class UserSettings {
     speechVolume = defaults.float(forKey: "speechVolume")
         
     if defaults.float(forKey: "speechPostDelay").isZero {
-        defaults.set(SpeechRate, forKey: "speechPostDelay")
+        defaults.set(SpeechPostDelay, forKey: "speechPostDelay")
     }
     speechPostDelay = defaults.float(forKey: "speechPostDelay")
     
@@ -460,6 +470,36 @@ func speechSettingUpdate( setting: SpeechSetting, value: Float) {
         
         mphKnots = value
         defaults.set(mphKnots, forKey: "mphKnots")
+    }
+    
+    func simSettingUpdate( setting: SimSetting, value: Float) {
+        
+        switch setting {
+             
+        case .heading:
+            simHeading = value
+            defaults.set(simHeading, forKey: "simHeading")
+            
+        case .hdgAmpl:
+            simHdgAmpl = value
+            defaults.set(simHdgAmpl, forKey: "simHdgAmpl")
+            
+        case .hdgPeriod:
+            simHdgPeriod = value
+            defaults.set(simHdgPeriod, forKey: "simHdgPeriod")
+            
+        case .speed:
+            simSpeed = value
+            defaults.set(simSpeed, forKey: "simSpeed")
+                
+        case .spdAmpl:
+            simSpdAmpl = value
+            defaults.set(simSpdAmpl, forKey: "simSpdAmpl")
+                
+        case .spdPeriod:
+            simSpdPeriod = value
+            defaults.set(simSpdPeriod, forKey: "simSpdPeriod")
+         }
     }
     
 }
