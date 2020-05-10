@@ -25,7 +25,7 @@ class Simulator {
         let heading = settings.simHeading
         let hdgAmpl = settings.simHdgAmpl
         let hdgPeriod = settings.simHdgPeriod
-        let simHeadingChg = (sin( (Float((hdgCounter / timerFreq)) / hdgPeriod) * .pi ) * hdgAmpl)
+        let simHeadingChg = (sin( (Float((Float(hdgCounter) / Float(timerFreq))) / hdgPeriod) * .pi ) * hdgAmpl)
         let simHeading = addModulo(addend1: heading, addend2: simHeadingChg, modulo: 360)
         hdgCounter += 1
         //print("simHeading: \(simHeading)")
@@ -37,7 +37,7 @@ class Simulator {
         let speed = settings.simSpeed
         let spdAmpl = settings.simSpdAmpl
         let spdPeriod = settings.simSpdPeriod
-        let simSpeedChg = (sin( (Float((spdCounter / timerFreq)) / spdPeriod) * .pi ) * spdAmpl)
+        let simSpeedChg = (sin( (Float((Float(spdCounter) / Float(timerFreq))) / Float(spdPeriod)) * .pi ) * spdAmpl)
         //print("speed: \(speed), simSpeedChg: \(simSpeedChg)")
         let simSpeed = speed + simSpeedChg
         spdCounter += 1
