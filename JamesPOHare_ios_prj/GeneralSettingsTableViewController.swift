@@ -39,8 +39,8 @@ class GeneralSettingsTableViewController: UITableViewController, DarkModeChgDele
         spchRateLbl.text = String(format: "Rate: %.2f",spchRateRef.value)
         spchPitchRef.value = settings.speechPitch
         spchPitchLbl.text = String(format: "Pitch: %.2f",spchPitchRef.value)
-        spchVolumeRef.value = settings.speechVolume
-        spchVolumeLbl.text = String(format: "Volume: %.2f",spchVolumeRef.value)
+        //spchVolumeRef.value = settings.speechVolume
+        //spchVolumeLbl.text = String(format: "Volume: %.2f",spchVolumeRef.value)
         //spchPostDelayRef.value = settings.speechPostDelay
         //spchPostDelayLbl.text = String(format: "Post Delay: %.2f",spchPostDelayRef.value)
         hdgDampingRef.value = Float(settings.hdgDamping)
@@ -60,9 +60,9 @@ class GeneralSettingsTableViewController: UITableViewController, DarkModeChgDele
         spchPitchRef.frame.origin.x = width -
             spchPitchRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
         spchPitchRef.frame.origin.y = CGFloat(sliderYPosition)
-        spchVolumeRef.frame.origin.x = width -
-            spchVolumeRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
-        spchVolumeRef.frame.origin.y = CGFloat(sliderYPosition)
+        //spchVolumeRef.frame.origin.x = width -
+        //    spchVolumeRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
+        //spchVolumeRef.frame.origin.y = CGFloat(sliderYPosition)
         //spchPostDelayRef.frame.origin.x = width -
          //   spchPostDelayRef.frame.width - CGFloat(sliderOffsetFromRightMargin)
         //spchPostDelayRef.frame.origin.y = CGFloat(sliderYPosition)
