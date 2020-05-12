@@ -101,7 +101,7 @@ class SpdSettingsTableViewController: UITableViewController, DarkModeChgDelegate
     @IBAction func spdMaxPeriodStpr(_ sender: Any) {
         
         spdMaxPeriodTboxRef.text = String(Int(spdMaxPeriodStprRef.value))
-        settings.spdSettingUpdate(setting: .minPeriod, value: Int(spdMaxPeriodStprRef.value))
+        settings.spdSettingUpdate(setting: .maxPeriod, value: Int(spdMaxPeriodStprRef.value))
     }
     
     @IBAction func spdMaxPeriodTboxValChg(_ sender: UITextField) {
@@ -117,7 +117,6 @@ class SpdSettingsTableViewController: UITableViewController, DarkModeChgDelegate
         settings.spdSettingUpdate(setting: .interval, value: SpdIntervalLUTbl[Int(spdIntervalStprRef.value)])
     }
     
-
     @IBOutlet weak var spdIndicateTrendSignalRef: UISwitch!
     
     @IBAction func spdIndicateTrendSignal(_ sender: Any) {
