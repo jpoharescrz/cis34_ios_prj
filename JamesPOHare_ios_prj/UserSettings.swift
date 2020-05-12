@@ -84,7 +84,7 @@ let SpdTrendNegText: String = "down"
 
 let SpeechRate: Float = 0.58
 let SpeechPitch: Float = 0.75
-let SpeechVolume: Float = 0.85
+let SpeechVolume: Float = 1.00
 let SpeechPostDelay: Float = 0.5
 var SpeechIsSpeaking: Bool = false
 
@@ -95,7 +95,7 @@ let SimSpeed: Float = 10.0
 let SimSpdAmpl: Float = 2.0
 let SimSpdPeriod: Float = 25
 
-let TimerFreq: Int = 6
+let TimerFreq: Int = 10
 
 var settings = UserSettings()
 
