@@ -14,11 +14,11 @@ import CoreData
 // var settings = UserSettings()
 protocol headingUpdateDelegate {
     
-    func headingUpdate( newHeading: Float )
+    func headingUpdate( newHeading: Float, updateDigits: Bool )
 }
 protocol speedUpdateDelegate {
     
-    func speedUpdate( newSpeed: Float )
+    func speedUpdate( newSpeed: Float, updateDigits: Bool )
 }
 
 class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocationManagerDelegate, AVAudioPlayerDelegate, RemoteStartStopDelegate, DarkModeChgDelegate {
@@ -37,18 +37,18 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     let trendTimerMaxInit: Int = 50         // max period 5.0 seconds
     let trendPeriodReductionMax: Int = 34
     let trendTimerFactor: Int = 6
-    let maxTrendTimerDownCountEnhancement: Float = 0.75
-    let trendSigEnhancedRptFactor:Float = 0.35
+    let maxTrendTimerDownCountEnhancement: Float = 1.0
+    let trendSigEnhancedRptFactor:Float = 0.15
     
     var locManager = CLLocationManager.init()
     
     
-    let hdgSpeechRateAdjustFactor:Float = 0.08
+    let hdgSpeechRateAdjustFactor:Float = 0.2
     
-    let spdSpeechRateAdjustFactor:Float = 0.2
+    let spdSpeechRateAdjustFactor:Float = 0.1
     let spdSpeechPitchAdjust: Float = 0.19
     
-    let maxSpeechRate = 0.67
+    let maxSpeechRate = 0.65
     let maxSpeechPitch = 0.85
     
     var hdgSampleRcvd:Bool = false
@@ -66,6 +66,8 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     
     var hdgManager = HeadingManager()
     var spdManager = SpeedManager()
+    var millisSinceStart:Int64 = 0
+    var lastDigitUpdateTimestamp: Int64 = 0
     
     var simulator: Simulator?
     
@@ -200,6 +202,16 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
         var textToSpeak: String = ""
         var rateAdjust: Float
         
+        // Code to control rate of digital display update
+        millisSinceStart += Int64(( 1.0 / Float(settings.timerFreq) ) * 1000)
+        //print( "millisSinceStart : \(millisSinceStart)")
+        let etSinceDigitUpdate:Int64 = millisSinceStart - lastDigitUpdateTimestamp
+        let updateDigits:Bool = ( etSinceDigitUpdate >= 250 )
+        if updateDigits {
+            lastDigitUpdateTimestamp = millisSinceStart
+            //print("Updating lastDigitUpdateTimestamp")
+        }
+        
         //print("timer fired!")
         if hdgSampleRcvd == true {
 
@@ -212,12 +224,14 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
             }
             ( report, textToSpeak, curHeading ) = hdgManager.procHeading(myNewHeading, lastScalarSpeaker: lastSpokenScaler, initCnt: curHeadingInitCnt)
             //print("curHeading: \(curHeading)")
-            hdgLabel.text = String( format: "%03.0f", Float(Int(curHeading)) )
-            hdgUpdateDelegate?.headingUpdate(newHeading: curHeading)
+            if updateDigits {
+                hdgLabel.text = String( format: "%03.0f", Float(Int(curHeading)) )
+            }
+            hdgUpdateDelegate?.headingUpdate(newHeading: curHeading, updateDigits: updateDigits)
                  
              if report {
 
-                rateAdjust = abs(hdgManager.perSecTrend) * hdgSpeechRateAdjustFactor
+                rateAdjust = (abs(hdgManager.perSecTrend) * hdgSpeechRateAdjustFactor) / Float(hdgManager.minPeriod)
                 speakText( textToSpeak, pitchAdjust: 0, rateAdjust: rateAdjust)
                  lastSpokenScaler = hdgManager.name
                  print("heading \(textToSpeak) spoken")
@@ -244,14 +258,16 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
         } else {
             curSpeed = curSpeed * Float(Double(metersPerSecToKnots))
         }
+        if updateDigits {
         spdLabel.text = String(format: "%.1f", curSpeed )
-        spdUpdateDelegate?.speedUpdate(newSpeed: Float(curSpeed))
+        }
+        spdUpdateDelegate?.speedUpdate(newSpeed: Float(curSpeed), updateDigits: updateDigits)
            
         ( report, textToSpeak ) = spdManager.procSpeed(Float(curSpeed), lastScalarSpeaker: lastSpokenScaler, initCnt: curSpeedInitCnt)
            
         if report {
             
-            rateAdjust = abs(spdManager.perSecTrend) * spdSpeechRateAdjustFactor
+            rateAdjust = (abs(spdManager.perSecTrend) * spdSpeechRateAdjustFactor) / Float(spdManager.MinPeriod)
             speakText( textToSpeak, pitchAdjust: spdSpeechPitchAdjust, rateAdjust: rateAdjust ) // higher pitch
                                                         //voice for speed
             lastSpokenScaler = spdManager.name
@@ -286,7 +302,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
                         playSound("Sounds/delta_steady-2")
                 }
                 trendTimerCnt = Float(trendTimerMaxInit)
-                let trendPeriodReduction = abs(hdgManager.perSecTrend * Float(TimerFreq)) * Float(trendTimerFactor)
+                let trendPeriodReduction = abs(hdgManager.perSecTrend) * Float(trendTimerFactor)
                 trendTimerCnt -= Float(min( trendPeriodReduction ,Float(trendPeriodReductionMax)))
                 
             } else if curHeadingInitCnt == 0 { // No trend signals for first few samples
@@ -300,6 +316,8 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     
     // Function to start receiving compass/speed data
     func start() {
+        
+        millisSinceStart = 0
         
         settings.timer = Timer.scheduledTimer(timeInterval: (1.0 / Double( TimerFreq )), target: self, selector: #selector(tmrFired), userInfo: nil, repeats: true)
         // Since it's the first sample, pretend all is well
