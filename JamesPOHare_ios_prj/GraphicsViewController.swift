@@ -78,8 +78,8 @@ class GraphicsViewController: UIViewController, headingUpdateDelegate, speedUpda
         spdGrphMutedLbl.isHidden = settings.spdAudioEnable
         
         darkModeChg(darkMode: settings.darkMode)
-        speedUpdate(newSpeed: 0.0)
-        headingUpdate(newHeading: 0.0)
+        speedUpdate(newSpeed: 0.0, updateDigits: true)
+        headingUpdate(newHeading: 0.0, updateDigits: true)
         if settings.mphKnots {
              mphKnotsLbl.text = "MPH"
          } else {
@@ -94,7 +94,7 @@ class GraphicsViewController: UIViewController, headingUpdateDelegate, speedUpda
         compassRoseRhumblineSize = Int(compassRoseCopy.image?.size.height ?? 100)/2
         
         // Set up speedometer needle size
-        speedoNeedleSize = Double((speedometerCopy.image?.size.height ?? 120) * 0.53)
+        speedoNeedleSize = Double((speedometerCopy.image?.size.height ?? 120) * 0.68)
         
         // Setup to get heading and speed updates
         if let homeTab = self.tabBarController?.viewControllers?[0] as? HomeViewController {
@@ -229,17 +229,17 @@ class GraphicsViewController: UIViewController, headingUpdateDelegate, speedUpda
         context.addLine(to: CGPoint(x: context.width/2 - Int(x), y: ((Int(Float(context.height) * 0.68))-Int(y))) )
              context.strokePath()
 
-             // Save the context as a new UIImage
+        // Save the context as a new UIImage
             
-            guard let myImage = UIGraphicsGetImageFromCurrentImageContext() else { return startingImage }
+        guard let myImage = UIGraphicsGetImageFromCurrentImageContext() else { return startingImage }
             
-             UIGraphicsEndImageContext()
+        UIGraphicsEndImageContext()
             
              // Return modified image
-             return myImage
+        return myImage
     }
     
-    func headingUpdate(newHeading: Float) {
+    func headingUpdate(newHeading: Float, updateDigits: Bool) {
         
         var rotatedImage: UIImage?
         
@@ -259,7 +259,9 @@ class GraphicsViewController: UIViewController, headingUpdateDelegate, speedUpda
         compassRose.frame.origin.x = compassRoseCopy.frame.origin.x - (xDiff/2)
         compassRose.frame.origin.y = compassRoseCopy.frame.origin.y - (yDiff/2)
         */
-        hdgLabel.text = String( format: "%03.0f", Float(Int(newHeading)) )
+        if updateDigits {
+            hdgLabel.text = String( format: "%03.0f", Float(Int(newHeading)) )
+        }
     }
     
     @IBOutlet weak var speedometer: UIImageView!
@@ -271,7 +273,7 @@ class GraphicsViewController: UIViewController, headingUpdateDelegate, speedUpda
     @IBOutlet weak var speedoMidLabel: UILabel!
     @IBOutlet weak var speedoMaxLabel: UILabel!
     
-    func speedUpdate(newSpeed: Float) {
+    func speedUpdate(newSpeed: Float, updateDigits: Bool) {
         
         // Adjust range if necessary
         if newSpeed > Float(speedoRange) {
@@ -300,7 +302,9 @@ class GraphicsViewController: UIViewController, headingUpdateDelegate, speedUpda
         }
         speedometer.image = drawNeedleOnDial(startingImage: speedometerImage!, value: newSpeed, range: Float(speedoRange))
         
-        speedoLabel.text = String(format: "%.1f", newSpeed )
+        if updateDigits {
+            speedoLabel.text = String(format: "%.1f", newSpeed )
+        }
     }
     
     @IBOutlet weak var graphicsStartBtnRef: UIButton!
