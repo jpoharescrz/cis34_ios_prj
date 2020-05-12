@@ -21,9 +21,9 @@ class SpeakableScalar {
     var prevDirCrossed: Int
     var interval: Float
     var lastSample: Float
-    var trend: Float
+    var perSecTrend: Float
     let trendEnhancedRptFactor: Float = 0.12
-    let trendThreshToIndicate: Float = 1.2
+    let trendThreshToIndicate: Float = 0.25
     var prevTrendSignal: String
     var indicateTrend: Bool
     var indicateTrendSignal: Bool
@@ -45,7 +45,7 @@ class SpeakableScalar {
         prevMarkedValue = 0
         prevDirCrossed = 1
         lastSample = 0
-        trend = 0
+        perSecTrend = 0
         prevTrendSignal = "steady"
         indicateTrend = false
         indicateTrendSignal = false
@@ -81,9 +81,8 @@ class SpeakableScalar {
      }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Takes the heading and determines if a hatch mark was crossed
-    // returns (hatchX(bool), mark value(Float), X direction (Int, 1,-1)
-    func markCrossed(_ dataSample: Float) -> (Bool, Float, Int, Bool) {
+    // Takes the heading and determines if an interval was crossed
+    func chkIntervalCrossed(_ dataSample: Float) -> (Bool, Float, Int, Bool) {
           
         var crossed: Bool = false
         var intervalCrossed: Float = 0.0
@@ -103,8 +102,8 @@ class SpeakableScalar {
             }
             crossed = true
         }
-        // if more than 25% of interval
-        else if absDiff > (interval / 4) {
+        // if more than 15% of interval
+        else if absDiff > (interval / 6) {
             // if cross back negative when previous cross was positive
             if (diff < 0) && (prevDirCrossed == 1){
     
@@ -141,27 +140,26 @@ class SpeakableScalar {
         /*
         trend = (((trend * Float((timerFreq * dampFactor) - 1))) + rawTrend )
             / Float(timerFreq * dampFactor) */
-        trend = rawTrend
+        perSecTrend = rawTrend * Float(timerFreq)
         lastSample = sample
+        
+        // update the timers
+        maxTimer -= 1
+        minTimer -= 1
+        //minTimer -= Float(1 + (abs(perSecTrend) * trendEnhancedRptFactor))
         
         let isSpeakingOrPlayingSound = isSpeaking || isSoundPlaying
         
-        if (maxTimer <= 0) && !isSpeakingOrPlayingSound { // maxTimer going to zero means report regardless
-             
-            report = true
-            maxTimer = maxPeriod * timerFreq
-            minTimer = Float( minPeriod * timerFreq )
-            sampleToSpeak = sample
-            //print("MinPeriod: \(minPeriod)")
-        }
-        else {
-            maxTimer -= 1
+        if isSpeakingOrPlayingSound {
+
+            return (report, sample, crossed, dirCrossed)
         }
         
-        if (minTimer <= 0) && !isSpeakingOrPlayingSound {  // if minimum period passed,
+        if (minTimer <= 0) {  // if minimum period passed,
                             // check for interval crossing
             (crossed, sampleToSpeak, dirCrossed, dirChanged) =
-                markCrossed( sample )
+                chkIntervalCrossed( sample )
+            
             if crossed {
      
                 prevDirCrossed = dirCrossed
@@ -170,20 +168,24 @@ class SpeakableScalar {
                 if !dirChanged {
                     minTimer = Float(minPeriod * timerFreq)
                 } else {
-                    //minTimer = 0 // stay verbose if trend changed
-                    minTimer = Float(minPeriod * timerFreq)/2 // stay verbose if trend changed
+                    //minTimer = 0 // stay verbose if perSecTrend changed
+                    minTimer = Float(minPeriod * timerFreq)/2 // stay verbose if perSecTrend changed
                 }
                 // First full report after interval crossing
                 // happens in InitialMaxPeriod instead of MaxPeriod
-                maxTimer = max((InitialMaxPeriod * timerFreq),((minPeriod+3) * timerFreq))
+                //maxTimer = max((InitialMaxPeriod * timerFreq),((minPeriod+3) * timerFreq))
+                maxTimer = maxPeriod * timerFreq
                 //print("MinPeriod: \(minPeriod)")
                 report = true
             }
         }
-        else {
-            // minTimer -= 1
-            // larger trend shortens period between reports
-            minTimer -= Float(1 + (abs(trend) * trendEnhancedRptFactor) * Float(timerFreq))
+        if (maxTimer <= 0) { // maxTimer going to zero means report regardless
+                 
+            report = true
+            maxTimer = maxPeriod * timerFreq
+            //minTimer = Float( minPeriod * timerFreq )
+            sampleToSpeak = sample
+            //print("MinPeriod: \(minPeriod)")
         }
         
         if audioEnabled == false {
@@ -197,7 +199,7 @@ class SpeakableScalar {
 class HeadingManager: SpeakableScalar, UserHdgSettingsUpdateDelegate {
     
     let Modulo = 360
-    let TrendThresh: Float = 0.5
+    let TrendThresh: Float = 0.25
     
     init(){
         super.init(frNm: "Heading")
@@ -258,15 +260,15 @@ class HeadingManager: SpeakableScalar, UserHdgSettingsUpdateDelegate {
             if crossed {
                 
                 if indicateTrend &&
-                    ((abs(trend) < trendThreshToIndicate)){ // trend changed
+                    ((abs(perSecTrend) > trendThreshToIndicate)){ // trend changed
                     
                     if dirCrossed == 1 { // crossed positively
                         //textToSpeak += " ," + trendTextPos
-                        textToSpeak += "!? " + trendTextPos
+                        textToSpeak += ", " + trendTextPos
                      }
                      else { // crossed negatively
                         //textToSpeak += " ," + trendTextNeg
-                        textToSpeak += "!? " + trendTextNeg
+                        textToSpeak += ", " + trendTextNeg
                      }
                     
                 }
@@ -290,10 +292,10 @@ class HeadingManager: SpeakableScalar, UserHdgSettingsUpdateDelegate {
         
         //print(trend)
         
-        if trend > (TrendThresh / Float(timerFreq)) {
+        if perSecTrend > (TrendThresh) {
             trendSignal = "up"
         }
-        else if trend < ((TrendThresh / Float(timerFreq)) * -1) {
+        else if perSecTrend < (TrendThresh * -1) {
             trendSignal = "down"
         }
         else {
@@ -449,6 +451,8 @@ class SpeedManager: SpeakableScalar, UserSpdSettingsUpdateDelegate {
         }
         (report, speed, crossed, dirCrossed) = procNewSample(spd)
         
+        //print("Speed Max Timer: \(maxTimer)")
+        
         // if we can report this heading
         if report {
             
@@ -462,10 +466,10 @@ class SpeedManager: SpeakableScalar, UserSpdSettingsUpdateDelegate {
                 if indicateTrend {
                     
                     if dirCrossed == 1 { // crossed positively
-                         textToSpeak += "!? " + trendTextPos
+                         textToSpeak += ", " + trendTextPos
                      }
                      else { // crossed negatively
-                         textToSpeak += "!? " + trendTextNeg
+                         textToSpeak += ", " + trendTextNeg
                      }
                 }
 
