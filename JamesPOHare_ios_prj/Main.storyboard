@@ -17,26 +17,38 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bxM-rF-Ab0">
                                 <rect key="frame" x="71" y="0.0" width="233" height="153"/>
+                                <accessibility key="accessibilityConfiguration" hint="Digital Compass" label="Digital Compass"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="128"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
+                                <attributedString key="userComments">
+                                    <fragment content="Digital Compass"/>
+                                </attributedString>
                                 <variation key="heightClass=regular-widthClass=regular">
                                     <fontDescription key="fontDescription" type="system" pointSize="186"/>
                                 </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wS4-ZC-yTI">
                                 <rect key="frame" x="95" y="203" width="185" height="153"/>
+                                <accessibility key="accessibilityConfiguration" hint="Digital Speedometer" label="Digital Speedometer"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="128"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
+                                <attributedString key="userComments">
+                                    <fragment content="Digital Speedometer"/>
+                                </attributedString>
                                 <variation key="heightClass=regular-widthClass=regular">
                                     <fontDescription key="fontDescription" type="system" pointSize="186"/>
                                 </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R4f-wK-DRS">
                                 <rect key="frame" x="119.5" y="518" width="136" height="92"/>
+                                <accessibility key="accessibilityConfiguration" hint="Start/Stop button" label="Start/Stop button"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="95"/>
                                 <state key="normal" title="Start"/>
+                                <attributedString key="userComments">
+                                    <fragment content="Start/Stop button"/>
+                                </attributedString>
                                 <variation key="heightClass=compact-widthClass=compact">
                                     <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                 </variation>
@@ -1191,6 +1203,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="c_rose_wht_3-c" translatesAutoresizingMaskIntoConstraints="NO" id="HbA-Oj-jqO" customClass="CompassRoseView" customModule="JamesPOHare_ios_prj" customModuleProvider="target">
                                 <rect key="frame" x="62.5" y="18.5" width="250" height="250"/>
+                                <accessibility key="accessibilityConfiguration" hint="Compass Rose Image"/>
                                 <variation key="heightClass=regular-widthClass=regular" image="c_rose_wht_3-r"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="c_rose_wht_3-c" translatesAutoresizingMaskIntoConstraints="NO" id="6hK-AS-4KE" userLabel="Compass Rose Copy">
@@ -1215,14 +1228,19 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speedo_wht_1-c" translatesAutoresizingMaskIntoConstraints="NO" id="MaM-RJ-Ek2">
                                 <rect key="frame" x="62.5" y="318.5" width="250" height="190"/>
                                 <accessibility key="accessibilityConfiguration" hint="Speedometer Image"/>
+                                <attributedString key="userComments">
+                                    <fragment content="Speedometer Image"/>
+                                </attributedString>
                                 <variation key="heightClass=regular-widthClass=regular" image="speedo_wht_1-r"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speedo_wht_1-c" translatesAutoresizingMaskIntoConstraints="NO" id="VKE-Qa-b3d">
                                 <rect key="frame" x="62.5" y="318.5" width="250" height="190"/>
+                                <accessibility key="accessibilityConfiguration" hint="Speedometer Image"/>
                                 <variation key="heightClass=regular-widthClass=regular" image="speedo_wht_1-r"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speedo_drk_1-c" translatesAutoresizingMaskIntoConstraints="NO" id="aqL-nz-Nmg" userLabel="Speedometer Copy drk">
                                 <rect key="frame" x="62.5" y="319.5" width="250" height="188"/>
+                                <accessibility key="accessibilityConfiguration" hint="Speedometer Image"/>
                                 <variation key="heightClass=regular-widthClass=regular" image="speedo_drk_1-r"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1eA-qf-9cg">
@@ -1302,6 +1320,7 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i6z-BW-c8D">
                                 <rect key="frame" x="119.5" y="524" width="136" height="92"/>
+                                <accessibility key="accessibilityConfiguration" hint="Start/Stop button"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="84"/>
                                 <state key="normal" title="Start"/>
                                 <variation key="heightClass=compact-widthClass=compact">
