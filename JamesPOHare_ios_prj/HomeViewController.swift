@@ -32,23 +32,21 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     
     var trendTimer = Timer()
     let trendTimerFreq: Int = 10 // timer runs every 100 ms
-    var trendTimerCnt: Float = 0
     let trendTimerNewTrendInit: Int = 12 // signals after 1.2 seconds
-    let trendTimerMaxInit: Int = 50         // max period 5.0 seconds
-    let trendPeriodReductionMax: Int = 34
-    let trendTimerFactor: Int = 6
-    let maxTrendTimerDownCountEnhancement: Float = 1.0
-    let trendSigEnhancedRptFactor:Float = 0.15
+    let trendTimerMaxInit: Int = 55         // max period 5.0 seconds
+    var trendTimerCnt:Float = 55
+
+    let maxTrendTimerDownCountEnhancement: Float = 4.75
+    let trendSigEnhancedRptFactor:Float = 0.70
     
     var locManager = CLLocationManager.init()
     
-    
-    let hdgSpeechRateAdjustFactor:Float = 0.2
+    let hdgSpeechRateAdjustFactor:Float = 0.025
     
     let spdSpeechRateAdjustFactor:Float = 0.1
     let spdSpeechPitchAdjust: Float = 0.19
     
-    let maxSpeechRate = 0.65
+    let maxSpeechRate = 0.68
     let maxSpeechPitch = 0.85
     
     var hdgSampleRcvd:Bool = false
@@ -77,7 +75,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        print("Home view appearred")
+        print("Home view appeared")
         if settings.running {
             startBtnRef.setTitle("Stop", for: UIControl.State.normal)
         } else {
@@ -215,6 +213,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
         //print("timer fired!")
         if hdgSampleRcvd == true {
 
+            // Used to suppress first few heading samples
             if curHeadingInitCnt > 0 {
                 curHeadingInitCnt -= 1
             }
@@ -227,11 +226,13 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
             if updateDigits {
                 hdgLabel.text = String( format: "%03.0f", Float(Int(curHeading)) )
             }
+            // Update graphics screen
             hdgUpdateDelegate?.headingUpdate(newHeading: curHeading, updateDigits: updateDigits)
                  
              if report {
 
-                rateAdjust = (abs(hdgManager.perSecTrend) * hdgSpeechRateAdjustFactor) / Float(hdgManager.minPeriod)
+                // Adjust speech rate using trend
+                rateAdjust = abs(hdgManager.perSecTrend) * hdgSpeechRateAdjustFactor
                 speakText( textToSpeak, pitchAdjust: 0, rateAdjust: rateAdjust)
                  lastSpokenScaler = hdgManager.name
                  print("heading \(textToSpeak) spoken")
@@ -250,6 +251,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
         } else {
             let loc = locManager.location
             curSpeed = Float(loc?.speed ?? 0)
+            //print("Speed: \(curSpeed)")
         }
  
         //print("curSpeed: \(curSpeed)")
@@ -267,7 +269,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
            
         if report {
             
-            rateAdjust = (abs(spdManager.perSecTrend) * spdSpeechRateAdjustFactor) / Float(spdManager.MinPeriod)
+            rateAdjust = abs(spdManager.perSecTrend) * spdSpeechRateAdjustFactor
             speakText( textToSpeak, pitchAdjust: spdSpeechPitchAdjust, rateAdjust: rateAdjust ) // higher pitch
                                                         //voice for speed
             lastSpokenScaler = spdManager.name
@@ -288,9 +290,18 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
             
             (newTrend, trendSignal) = hdgManager.getTrend()
             
+            /*
             if (newTrend && (trendTimerCnt > Float(trendTimerNewTrendInit))) {
                 trendTimerCnt = Float(trendTimerNewTrendInit) // new trend delay before signal
+            } */
+            
+            if curHeadingInitCnt == 0 { // No trend signals for first few samples
+
+                let trendTimerDownCountEnhancement = min((abs(hdgManager.perSecTrend) * trendSigEnhancedRptFactor), maxTrendTimerDownCountEnhancement)
+                //print("trendTimerDownCountEnhancement:  \(trendTimerDownCountEnhancement) Timer: \(trendTimerCnt)")
+                trendTimerCnt -= Float(1 + trendTimerDownCountEnhancement)
             }
+            
             if (trendTimerCnt <= 0) {
              
                 switch trendSignal {
@@ -302,14 +313,6 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
                         playSound("Sounds/delta_steady-2")
                 }
                 trendTimerCnt = Float(trendTimerMaxInit)
-                let trendPeriodReduction = abs(hdgManager.perSecTrend) * Float(trendTimerFactor)
-                trendTimerCnt -= Float(min( trendPeriodReduction ,Float(trendPeriodReductionMax)))
-                
-            } else if curHeadingInitCnt == 0 { // No trend signals for first few samples
-                //trendTimerCnt -= 1
-                let trendTimerDownCountEnhancement = min((abs(hdgManager.perSecTrend) * trendSigEnhancedRptFactor), maxTrendTimerDownCountEnhancement)
-                //print("trendTimerDownCountEnhancement:  \(trendTimerDownCountEnhancement)")
-                trendTimerCnt -= Float(1 + trendTimerDownCountEnhancement)
             }
         }
     }
@@ -318,6 +321,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     func start() {
         
         millisSinceStart = 0
+        lastDigitUpdateTimestamp = 0
         
         settings.timer = Timer.scheduledTimer(timeInterval: (1.0 / Double( TimerFreq )), target: self, selector: #selector(tmrFired), userInfo: nil, repeats: true)
         // Since it's the first sample, pretend all is well
@@ -326,6 +330,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
         curSpeedInitCnt = 6 // Suppress damping for first 6 samples
         if !settings.simEnable {
             locManager.startUpdatingLocation()
+            //print("locManager.startUpdatingLocation()")
         }
         
         // Setup the trend indictor timer
@@ -378,9 +383,9 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     // ocation manager calls this to update location, and speed in our case
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: CLLocation) {
         
-        //let newSpeed = locations.speed
+        let newSpeed = locations.speed
         //spdLabel.text = String(format: "%02.1f", newSpeed)
-        //print( "Current speed: \(newSpeed)" )
+        print( "Current speed: \(newSpeed)" )
     }
     
     // MARK: -
@@ -399,6 +404,7 @@ class HomeViewController: UIViewController, AVSpeechSynthesizerDelegate, CLLocat
     func speakText(_ textToSpeak: String, pitchAdjust:Float, rateAdjust: Float) {
          
         // let signal = AVSpeechUtterance()
+        print("Rate adjust: \(rateAdjust)")
         let speechUtterance = AVSpeechUtterance(string: textToSpeak)
         speechUtterance.rate = min(settings.speechRate + rateAdjust, Float(maxSpeechRate))
         speechUtterance.pitchMultiplier = min(settings.speechPitch + pitchAdjust, Float(maxSpeechPitch))
