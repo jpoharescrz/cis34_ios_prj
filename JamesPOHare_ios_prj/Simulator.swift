@@ -25,11 +25,12 @@ class Simulator {
         let heading = settings.simHeading
         let hdgAmpl = settings.simHdgAmpl
         let hdgPeriod = settings.simHdgPeriod
-        let simHeadingChg = (sin( (Float((Float(hdgCounter) / Float(timerFreq))) / hdgPeriod) * .pi ) * hdgAmpl)
-        let simHeading = addModulo(addend1: heading, addend2: simHeadingChg, modulo: 360)
+        let simHeadingChg: Float = Float(sin((Float((Float(hdgCounter) / Float(timerFreq))) / hdgPeriod) * .pi ) * hdgAmpl)
+        let simHeading: Float = addModulo(addend1: heading, addend2: simHeadingChg, modulo: 360)
         hdgCounter += 1
         //print("simHeading: \(simHeading)")
         return simHeading
+            //+ Float(arc4random_uniform(<#T##__upper_bound: UInt32##UInt32#>)(10))
     }
     
     func getSimSpeed() -> Float {
