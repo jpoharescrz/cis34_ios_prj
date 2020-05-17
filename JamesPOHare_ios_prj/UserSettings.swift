@@ -85,7 +85,7 @@ let SpdTrendNegText: String = "down"
 let SpeechRate: Float = 0.58
 let SpeechPitch: Float = 0.75
 let SpeechVolume: Float = 1.00
-let SpeechPostDelay: Float = 0.5
+let SpeechPostDelay: Float = 0.3
 var SpeechIsSpeaking: Bool = false
 
 let SimHeading: Float = 360
