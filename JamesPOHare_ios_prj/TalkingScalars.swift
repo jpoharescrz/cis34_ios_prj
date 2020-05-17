@@ -17,6 +17,8 @@ class SpeakableScalar {
     var maxTimer: Int
     var maxPeriod: Int
     var timerFreq: Int
+    var supressIntervalRpt: Int
+    let supressIntervalRptInit: Int = 3
     var prevMarkedValue: Float
     var prevDirCrossed: Int
     var interval: Float
@@ -41,6 +43,7 @@ class SpeakableScalar {
         minPeriod = 15
         maxTimer = 15
         maxPeriod = 15
+        supressIntervalRpt = 0
         timerFreq = 1
         prevMarkedValue = 0
         prevDirCrossed = 1
@@ -103,9 +106,11 @@ class SpeakableScalar {
             crossed = true
         }
         // if more than 15% of interval
-        else if absDiff > (interval / 6) {
+        //else if absDiff > (interval / 6) {
+        else {
             // if cross back negative when previous cross was positive
-            if (diff < 0) && (prevDirCrossed == 1){
+            if (diff < 0) && ((perSecTrend < (trendThreshToIndicate * -1)) ||
+                (absDiff > (interval / 6))) && (prevDirCrossed == 1){
     
                 roundUp = true
                 dirCrossed = -1
@@ -113,7 +118,8 @@ class SpeakableScalar {
                 dirChanged = true
             }
             // if cross back positive when previous cross was negative
-            else if (diff > 0) && (prevDirCrossed == -1){
+            else if (diff > 0) && ((perSecTrend > trendThreshToIndicate) ||
+            (absDiff > (interval / 6))) && (prevDirCrossed == -1){
     
                 crossed = true
                 dirChanged = true
@@ -146,6 +152,9 @@ class SpeakableScalar {
         // update the timers
         maxTimer -= 1
         minTimer -= 1
+        if supressIntervalRpt > 0 {
+            supressIntervalRpt -= 1
+        }
         //minTimer -= Float(1 + (abs(perSecTrend) * trendEnhancedRptFactor))
         
         let isSpeakingOrPlayingSound = isSpeaking || isSoundPlaying
@@ -174,14 +183,20 @@ class SpeakableScalar {
                 // First full report after interval crossing
                 // happens in InitialMaxPeriod instead of MaxPeriod
                 //maxTimer = max((InitialMaxPeriod * timerFreq),((minPeriod+3) * timerFreq))
-                maxTimer = maxPeriod * timerFreq
+                let maxPeriodInit = maxPeriod * timerFreq
+            
+                maxTimer = maxPeriodInit
                 //print("MinPeriod: \(minPeriod)")
-                report = true
+                // TBD: Suppress report if recent full report
+                if supressIntervalRpt == 0 {
+                    report = true
+                }
             }
         }
         if (maxTimer <= 0) { // maxTimer going to zero means report regardless
                  
             report = true
+            supressIntervalRpt = supressIntervalRptInit * timerFreq
             maxTimer = maxPeriod * timerFreq
             //minTimer = Float( minPeriod * timerFreq )
             sampleToSpeak = sample
@@ -199,7 +214,7 @@ class SpeakableScalar {
 class HeadingManager: SpeakableScalar, UserHdgSettingsUpdateDelegate {
     
     let Modulo = 360
-    let TrendThresh: Float = 0.25
+    let TrendThresh: Float = 1.0
     
     init(){
         super.init(frNm: "Heading")
@@ -259,18 +274,16 @@ class HeadingManager: SpeakableScalar, UserHdgSettingsUpdateDelegate {
             // appending up/down
             if crossed {
                 
-                if indicateTrend &&
-                    ((abs(perSecTrend) > trendThreshToIndicate)){ // trend changed
+                if indicateTrend {
                     
                     if dirCrossed == 1 { // crossed positively
                         //textToSpeak += " ," + trendTextPos
                         textToSpeak += ", " + trendTextPos
-                     }
-                     else { // crossed negatively
+                    }
+                    else { // crossed negatively
                         //textToSpeak += " ," + trendTextNeg
                         textToSpeak += ", " + trendTextNeg
-                     }
-                    
+                    }
                 }
  
                 if name != lastScalarSpeaker {
@@ -279,6 +292,19 @@ class HeadingManager: SpeakableScalar, UserHdgSettingsUpdateDelegate {
             }
             else {
                 textToSpeak = "Heading " + textToSpeak + " degrees"
+                
+                if indicateTrend &&
+                    ((abs(perSecTrend) > trendThreshToIndicate)){ // trend changed
+                    
+                    if perSecTrend > 0 { // crossed positively
+                        //textToSpeak += " ," + trendTextPos
+                        textToSpeak += ", " + trendTextPos
+                     }
+                     else { // crossed negatively
+                        //textToSpeak += " ," + trendTextNeg
+                        textToSpeak += ", " + trendTextNeg
+                     }
+                }
             }
 
         }
@@ -482,6 +508,15 @@ class SpeedManager: SpeakableScalar, UserSpdSettingsUpdateDelegate {
                     textToSpeak = "Speed " + textToSpeak + " knots"
                 } else {
                     textToSpeak = "Speed " + textToSpeak + " miles per hour"
+                }
+                if indicateTrend && (abs(perSecTrend) > trendThreshToIndicate) {
+                    
+                    if perSecTrend > 0 { // crossed positively
+                         textToSpeak += ", " + trendTextPos
+                     }
+                     else { // crossed negatively
+                         textToSpeak += ", " + trendTextNeg
+                     }
                 }
             }
         }
